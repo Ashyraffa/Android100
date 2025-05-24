@@ -7,7 +7,7 @@
         <meta name="keywords" content="android, parody, web-based android, android100, joke android, online android, fake android OS, interactive android, android simulator">
         <meta name="author" content="Ashyraffa">
         <title>Android100</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="system/style.css">
         <style>
             html, body {
                 height: 100%;
@@ -16,7 +16,7 @@
             }
             body {
                 min-height: 100vh;
-                background-image: url('wallpaper/forest.jpg');
+                background-image: url('forest.jpg');
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -164,7 +164,7 @@
         <footer>
             <p>Swipe up to unlock</p>
         </footer>
-        <script src="script.js"></script>
+        <script src="system/script.js"></script>
         <script>
             date();
             clock();
@@ -182,7 +182,7 @@
                 if (touchStartY !== null && e.changedTouches.length === 1) {
                     let touchEndY = e.changedTouches[0].clientY;
                     if (touchStartY - touchEndY > 50) { 
-                        window.location.href = "main.html";
+                        window.location.href = "system/main.html";
                     }
                 }
                 touchStartY = null;
