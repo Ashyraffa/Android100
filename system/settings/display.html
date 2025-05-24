@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Display Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .display-container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 24px 0;
+    }
+    .display-header {
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: #222;
+    }
+    .display-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .display-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .display-item:last-child {
+      border-bottom: none;
+    }
+    .display-item:hover {
+      background: #f0f0f0;
+    }
+    .display-label {
+      font-size: 1.1em;
+      color: #333;
+    }
+    .display-slider {
+      width: 120px;
+    }
+    .back-btn {
+      display: block;
+      margin: 18px auto 0 auto;
+      background: #00ff88;
+      color: #181818;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 32px;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+    }
+    .back-btn:hover, .back-btn:active {
+      background: #00cc6a;
+      color: #fff;
+    }
+    /* Tray and Control Center styles from main.html */
+    .tray {
+      padding: 5px;
+      height: 18px;
+      background: #222;
+      color: #eee;
+      font-size: 1.1em;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .content-top-margin {
+      margin-top: 28px;
+    }
+    /* Control Center styles */
+    #control-center {
+      display:none;
+      position:fixed;
+      top:28px;
+      left:0;
+      width:100%;
+      background:rgba(34,34,34,0.98);
+      color:#fff;
+      z-index:2000;
+      box-shadow:0 4px 16px #000a;
+      border-bottom-left-radius:16px;
+      border-bottom-right-radius:16px;
+      padding:24px 0 16px 0;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Tray and Control Center markup from main.html -->
+  <div class="tray" id="tray">
+    <span>[0%]</span>
+    <span>4G</span>
+    <span id="clock">--:--</span>
+  </div>
+  <div id="control-center">
+    <div style="max-width:400px; margin:0 auto;">
+      <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
+      <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:2em;">🏃‍➡️</div>
+          <div>Run</div>
+          <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">📶</div>
+          <div>Cellular Network</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔦</div>
+          <div>Flashlight</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔗</div>
+          <div>Software Update</div>
+          <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔎</div>
+          <div>Find</div>
+          <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
+        </div>
+      </div>
+      <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
+    </div>
+  </div>
+  <div class="content-top-margin">
+    <div class="display-container">
+      <div class="display-header">Display Settings</div>
+      <ul class="display-list">
+        <li class="display-item">
+          <span class="display-label">Brightness</span>
+          <input class="display-slider" type="range" min="0" max="100" value="80" id="brightness-slider">
+        </li>
+        <li class="display-item">
+          <span class="display-label">Font Size</span>
+          <input class="display-slider" type="range" min="12" max="28" value="16" id="font-slider">
+        </li>
+        <li class="display-item">
+          <span class="display-label">Inverted</span>
+          <label style="color: gray; font-size: 15px">Did you just- drink drugs?</label>
+          <label class="settings-toggle">
+            <input type="checkbox" id="invert-toggle">
+            <span class="settings-toggle-slider"></span>
+          </label>
+        </li>
+        <li class="display-item">
+          <span class="display-label">Blur</span>
+          <label style="color: gray; font-size: 15px">You may need glasses</label>
+          <label class="settings-toggle">
+            <input type="checkbox" id="blur-toggle">
+            <span class="settings-toggle-slider"></span>
+          </label>
+        </li>
+        <li class="display-item">
+          <span class="display-label">Rotate 180°</span>
+          <label style="color: gray; font-size: 15px">Your phone looks weird now</label>
+          <label class="settings-toggle">
+            <input type="checkbox" id="rotate-toggle">
+            <span class="settings-toggle-slider"></span>
+          </label>
+        </li>
+      </ul>
+      <button class="back-btn" onclick="window.history.back()">Back</button>
+    </div>
+  </div>
+  <script>
+    // Tray/Control Center logic from main.html
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}`;
+    }
+    updateClock();
+    setInterval(updateClock, 60000);
+
+    let trayStartY = null;
+    const tray = document.getElementById('tray');
+    const controlCenter = document.getElementById('control-center');
+    tray.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        trayStartY = e.touches[0].clientY;
+      }
+    });
+    tray.addEventListener('touchend', function(e) {
+      if (trayStartY !== null && e.changedTouches.length === 1) {
+        let trayEndY = e.changedTouches[0].clientY;
+        if (trayEndY - trayStartY > 40) {
+          showControlCenter();
+        }
+      }
+      trayStartY = null;
+    });
+    let mouseDownY = null;
+    tray.addEventListener('mousedown', function(e) {
+      mouseDownY = e.clientY;
+    });
+    tray.addEventListener('mouseup', function(e) {
+      if (mouseDownY !== null) {
+        if (e.clientY - mouseDownY > 40) {
+          showControlCenter();
+        }
+      }
+      mouseDownY = null;
+    });
+    function showControlCenter() {
+      controlCenter.style.display = 'block';
+    }
+    function hideControlCenter() {
+      controlCenter.style.display = 'none';
+    }
+    // Utility: Save and load settings to localStorage for global effect
+    function saveDisplaySettings() {
+      const settings = {
+        invert: document.getElementById('invert-toggle').checked,
+        blur: document.getElementById('blur-toggle').checked,
+        rotate: document.getElementById('rotate-toggle').checked,
+        brightness: document.getElementById('brightness-slider').value,
+        fontSize: document.getElementById('font-slider').value
+      };
+      localStorage.setItem('android100_display_settings', JSON.stringify(settings));
+    }
+
+    function loadDisplaySettings() {
+      const settings = JSON.parse(localStorage.getItem('android100_display_settings') || '{}');
+      if ('invert' in settings) document.getElementById('invert-toggle').checked = settings.invert;
+      if ('blur' in settings) document.getElementById('blur-toggle').checked = settings.blur;
+      if ('rotate' in settings) document.getElementById('rotate-toggle').checked = settings.rotate;
+      if ('brightness' in settings) document.getElementById('brightness-slider').value = settings.brightness;
+      if ('fontSize' in settings) document.getElementById('font-slider').value = settings.fontSize;
+    }
+
+    function updateGlobalEffects() {
+      let filters = [];
+      if (document.getElementById('invert-toggle').checked) filters.push('invert(1)');
+      if (document.getElementById('blur-toggle').checked) filters.push('blur(4px)');
+      document.documentElement.style.filter = filters.join(' ') || '';
+      document.body.style.filter = ''; // Remove from body, use html for global
+      document.documentElement.style.transform = document.getElementById('rotate-toggle').checked ? 'rotate(180deg)' : '';
+      saveDisplaySettings();
+    }
+
+    // Simulate brightness by changing html background
+    document.getElementById('brightness-slider').addEventListener('input', function(e) {
+      const val = e.target.value;
+      document.documentElement.style.background = `rgb(${245 - val},${245 - val},${245 - val})`;
+      document.body.style.background = `rgb(${245 - val},${245 - val},${245 - val})`;
+      saveDisplaySettings();
+    });
+
+    // Simulate font size globally
+    document.getElementById('font-slider').addEventListener('input', function(e) {
+      document.documentElement.style.fontSize = e.target.value + 'px';
+      document.body.style.fontSize = e.target.value + 'px';
+      saveDisplaySettings();
+    });
+
+    // Fun options (global)
+    document.getElementById('invert-toggle').addEventListener('change', updateGlobalEffects);
+    document.getElementById('blur-toggle').addEventListener('change', updateGlobalEffects);
+    document.getElementById('rotate-toggle').addEventListener('change', updateGlobalEffects);
+
+    // Load settings on page load
+    loadDisplaySettings();
+    updateGlobalEffects();
+    document.getElementById('brightness-slider').dispatchEvent(new Event('input'));
+    document.getElementById('font-slider').dispatchEvent(new Event('input'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Center</title>
+  // ...existing code...
+  <script>
+    // Apply global display settings from localStorage (for all pages)
+    (function() {
+      try {
+        const settings = JSON.parse(localStorage.getItem('android100_display_settings') || '{}');
+        let filters = [];
+        if (settings.invert) filters.push('invert(1)');
+        if (settings.blur) filters.push('blur(4px)');
+        document.documentElement.style.filter = filters.join(' ') || '';
+        document.body.style.filter = '';
+        document.documentElement.style.transform = settings.rotate ? 'rotate(180deg)' : '';
+        if (settings.brightness) {
+          document.documentElement.style.background = `rgb(${245 - settings.brightness},${245 - settings.brightness},${245 - settings.brightness})`;
+          document.body.style.background = `rgb(${245 - settings.brightness},${245 - settings.brightness},${245 - settings.brightness})`;
+        }
+        if (settings.fontSize) {
+          document.documentElement.style.fontSize = settings.fontSize + 'px';
+          document.body.style.fontSize = settings.fontSize + 'px';
+        }
+      } catch(e) {}
+    })();
+  </script>
+<!-- ...existing code... -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #181818;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+    .tray {
+      padding: 5px;
+      height: 18px;
+      background: #222;
+      color: #eee;
+      font-size: 1.1em;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .content-top-margin {
+      margin-top: 28px;
+    }
+    .welcome-container {
+      max-width: 400px;
+      margin: 40px auto 0 auto;
+      background: #232323;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      padding: 32px 16px 32px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .welcome-logo {
+      font-size: 2.5em;
+      margin-bottom: 12px;
+    }
+    .welcome-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00ff88;
+      letter-spacing: 1px;
+    }
+    .welcome-desc {
+      color: #eee;
+      margin-bottom: 18px;
+      font-size: 1.1em;
+    }
+    .get-started-btn {
+      background: #00ff88;
+      color: #181818;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 36px;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 18px 0 0 0;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .get-started-btn:active, .get-started-btn:hover {
+      background: #00cc6a;
+      color: #fff;
+    }
+    @media (max-width: 500px) {
+      .welcome-container {
+        margin: 24px 4px 0 4px;
+        padding: 16px 4px 24px 4px;
+      }
+    }
+    #control-center {
+      display:none;
+      position:fixed;
+      top:28px;
+      left:0;
+      width:100%;
+      background:rgba(34,34,34,0.98);
+      color:#fff;
+      z-index:2000;
+      box-shadow:0 4px 16px #000a;
+      border-bottom-left-radius:16px;
+      border-bottom-right-radius:16px;
+      padding:24px 0 16px 0;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="tray" id="tray">
+    <span>[0%]</span>
+    <span>4G</span>
+    <span id="clock">--:--</span>
+  </div>
+  <div id="control-center">
+    <div style="max-width:400px; margin:0 auto;">
+      <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
+      <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:2em;">🏃‍➡️</div>
+          <div>Run</div>
+          <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">📶</div>
+          <div>Cellular Network</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔦</div>
+          <div>Flashlight</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔗</div>
+          <div>Software Update</div>
+          <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔎</div>
+          <div>Find</div>
+          <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
+        </div>
+      </div>
+      <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
+    </div>
+  </div>
+  <div class="content-top-margin">
+    <div class="welcome-container">
+      <div class="welcome-logo">📱</div>
+      <div class="welcome-title">Welcome to Android100</div>
+      <div class="welcome-desc">
+        Hello and Welcome to Android100. Here at Google, we strive to bring you quality *products that never* break down or fail you.<br>
+        <br>
+        now for da real stuff, if you're an Android user, then i'll guarantee you'll love this. Even if you're an iPhone user, you'll still LOVE THIS. I completely redesigned the look of the spoof and added new features for you to enjoy.<br>
+        <br>
+        One final thing, if this isn't on ashyraffa.github.com, it is stolen, If it's on GitHub but submitted by a user other than Ashyraffa (Ashyraffa3527), it is also stolen. If you see a stolen version of this web OS, report it to me!<br>
+        <br>
+        My email: raffa3527@outlook.com<br>
+        <br>
+        <b>Tips:</b>
+        <ul style="text-align:left; margin: 0 auto 0 1.5em; color: #aaa; font-size: 1em;">
+          <li>Swipe up to unlock the device.</li>
+          <li>Tap app icons to open apps.</li>
+          <li>Try the Manifesto for wisdom, or Messages for chat.</li>
+        </ul>
+      </div>
+      <button class="get-started-btn" onclick="goHome()">Get Started NOW!</button>
+    </div>
+  </div>
+  <script>
+    // Tray clock logic
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}`;
+    }
+    updateClock();
+    setInterval(updateClock, 60000);
+
+    function goHome() {
+      window.location.href = "../../system/main.html";
+    }
+    // Tray/Control Center logic
+    let trayStartY = null;
+    const tray = document.getElementById('tray');
+    const controlCenter = document.getElementById('control-center');
+    tray.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        trayStartY = e.touches[0].clientY;
+      }
+    });
+    tray.addEventListener('touchend', function(e) {
+      if (trayStartY !== null && e.changedTouches.length === 1) {
+        let trayEndY = e.changedTouches[0].clientY;
+        if (trayEndY - trayStartY > 40) {
+          showControlCenter();
+        }
+      }
+      trayStartY = null;
+    });
+    let mouseDownY = null;
+    tray.addEventListener('mousedown', function(e) {
+      mouseDownY = e.clientY;
+    });
+    tray.addEventListener('mouseup', function(e) {
+      if (mouseDownY !== null) {
+        if (e.clientY - mouseDownY > 40) {
+          showControlCenter();
+        }
+      }
+      mouseDownY = null;
+    });
+    function showControlCenter() {
+      controlCenter.style.display = 'block';
+    }
+    function hideControlCenter() {
+      controlCenter.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

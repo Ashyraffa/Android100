@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoTron Antivirus</title>
+  // ...existing code...
+  <script>
+    // Apply global display settings from localStorage (for all pages)
+    (function() {
+      try {
+        const settings = JSON.parse(localStorage.getItem('android100_display_settings') || '{}');
+        let filters = [];
+        if (settings.invert) filters.push('invert(1)');
+        if (settings.blur) filters.push('blur(4px)');
+        document.documentElement.style.filter = filters.join(' ') || '';
+        document.body.style.filter = '';
+        document.documentElement.style.transform = settings.rotate ? 'rotate(180deg)' : '';
+        if (settings.brightness) {
+          document.documentElement.style.background = `rgb(${245 - settings.brightness},${245 - settings.brightness},${245 - settings.brightness})`;
+          document.body.style.background = `rgb(${245 - settings.brightness},${245 - settings.brightness},${245 - settings.brightness})`;
+        }
+        if (settings.fontSize) {
+          document.documentElement.style.fontSize = settings.fontSize + 'px';
+          document.body.style.fontSize = settings.fontSize + 'px';
+        }
+      } catch(e) {}
+    })();
+  </script>
+<!-- ...existing code... -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #181818;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+    .tray {
+      padding: 5px;
+      height: 18px;
+      background: #222;
+      color: #eee;
+      font-size: 1.1em;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    .content-top-margin {
+      margin-top: 28px;
+    }
+    .antivirus-container {
+      max-width: 400px;
+      margin: 40px auto 0 auto;
+      background: #232323;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      padding: 24px 16px 32px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .antivirus-logo {
+      font-size: 2.5em;
+      margin-bottom: 12px;
+    }
+    .antivirus-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00ff88;
+      letter-spacing: 1px;
+    }
+    .scan-status {
+      margin: 18px 0 12px 0;
+      font-size: 1.1em;
+      color: #eee;
+    }
+    .scan-btn {
+      background: #00ff88;
+      color: #181818;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 36px;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 18px 0;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .scan-btn:active, .scan-btn:hover {
+      background: #00cc6a;
+      color: #fff;
+    }
+    .scan-results {
+      width: 100%;
+      background: #181818;
+      border-radius: 8px;
+      min-height: 60px;
+      margin-top: 10px;
+      padding: 12px;
+      color: #fff;
+      font-size: 1em;
+      box-sizing: border-box;
+      text-align: left;
+      word-break: break-word;
+    }
+    @media (max-width: 500px) {
+      .antivirus-container {
+        margin: 24px 4px 0 4px;
+        padding: 16px 4px 24px 4px;
+      }
+    }
+    .license-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .license-content {
+      background: #232323;
+      color: #fff;
+      border-radius: 12px;
+      max-width: 90vw;
+      width: 350px;
+      padding: 24px 18px 18px 18px;
+      box-shadow: 0 2px 12px #000a;
+      text-align: center;
+      font-size: 1em;
+    }
+    .license-content h2 {
+      color: #00ff88;
+      margin-top: 0;
+    }
+    .license-content button {
+      margin-top: 18px;
+      padding: 10px 32px;
+      border: none;
+      border-radius: 8px;
+      background: #00ff88;
+      color: #181818;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-right: 10px;
+    }
+    .license-content .reject-btn {
+      background: #ff4444;
+      color: #fff;
+    }
+    .license-content .reject-btn:hover, .license-content .reject-btn:active {
+      background: #cc2222;
+      color: #fff;
+    }
+    #control-center {
+      display:none;
+      position:fixed;
+      top:28px;
+      left:0;
+      width:100%;
+      background:rgba(34,34,34,0.98);
+      color:#fff;
+      z-index:2000;
+      box-shadow:0 4px 16px #000a;
+      border-bottom-left-radius:16px;
+      border-bottom-right-radius:16px;
+      padding:24px 0 16px 0;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="tray" id="tray">
+    <span>[0%]</span>
+    <span>4G</span>
+    <span id="clock">--:--</span>
+  </div>
+  <div id="control-center">
+    <div style="max-width:400px; margin:0 auto;">
+      <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
+      <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:2em;">🏃‍➡️</div>
+          <div>Run</div>
+          <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">📶</div>
+          <div>Cellular Network</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔦</div>
+          <div>Flashlight</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔗</div>
+          <div>Software Update</div>
+          <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
+        </div>
+        <div>
+          <div style="font-size:2em;">🔎</div>
+          <div>Find</div>
+          <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
+        </div>
+      </div>
+      <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
+    </div>
+  </div>
+  <div class="license-modal" id="license-modal">
+    <div class="license-content">
+      <h2>NoTron Antivirus - License Agreement</h2>
+      <p>
+        By using this app, you agree that NoTron Antivirus may steal your data, and sell it to the dark web.<br>
+        By using our services, you agree that NoTron may send someone to your house to monitor you.<br>
+        <b>You can't escape.</b>
+      </p>
+      <button onclick="acceptLicense()">Accept</button>
+      <button class="reject-btn" onclick="rejectLicense()">Reject</button>
+    </div>
+  </div>
+  <div class="content-top-margin" id="main-content" style="filter: blur(2px); pointer-events: none;">
+    <div class="antivirus-container">
+      <div class="antivirus-logo">🛡️</div>
+      <div class="antivirus-title">NoTron Antivirus</div>
+      <div class="scan-status" id="scan-status">Ready to scan.</div>
+      <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan Now</button>
+      <div class="scan-results" id="scan-results">No threats detected.</div>
+    </div>
+  </div>
+  <script>
+    // Tray clock logic
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}`;
+    }
+    updateClock();
+    setInterval(updateClock, 60000);
+
+    // License modal logic
+    function acceptLicense() {
+      document.getElementById('license-modal').style.display = 'none';
+      document.getElementById('main-content').style.filter = '';
+      document.getElementById('main-content').style.pointerEvents = '';
+    }
+
+    function rejectLicense() {
+      alert("You can't do that fool.");
+    }
+
+    // Optionally, prevent interaction with keyboard until accepted
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('main-content').style.filter = 'blur(2px)';
+      document.getElementById('main-content').style.pointerEvents = 'none';
+    });
+
+    // Antivirus scan simulation
+    function startScan() {
+      const status = document.getElementById('scan-status');
+      const results = document.getElementById('scan-results');
+      const btn = document.getElementById('scan-btn');
+      status.textContent = "Scanning... stealing your info....";
+      results.textContent = "";
+      btn.disabled = true;
+      btn.textContent = "Scanning...";
+      setTimeout(() => {
+        // Simulate random result
+        const threats = [
+          { name: "We succesfully steal your info and sell it to dark web.", color: "#00ff88" },
+          { name: "1 file found: Your Credit Card", color: "#ff4444" },
+          { name: "1 file found: Your Identity Card", color: "#ff4444" },
+        ];
+        const result = threats[Math.floor(Math.random() * threats.length)];
+        status.textContent = "Scan complete.";
+        results.innerHTML = `<span style="color:${result.color}">${result.name}</span>`;
+        btn.disabled = false;
+        btn.textContent = "Scan Again";
+      }, 1800);
+    }
+
+    // Tray/Control Center logic
+    let trayStartY = null;
+    const tray = document.getElementById('tray');
+    const controlCenter = document.getElementById('control-center');
+    tray.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        trayStartY = e.touches[0].clientY;
+      }
+    });
+    tray.addEventListener('touchend', function(e) {
+      if (trayStartY !== null && e.changedTouches.length === 1) {
+        let trayEndY = e.changedTouches[0].clientY;
+        if (trayEndY - trayStartY > 40) {
+          showControlCenter();
+        }
+      }
+      trayStartY = null;
+    });
+    let mouseDownY = null;
+    tray.addEventListener('mousedown', function(e) {
+      mouseDownY = e.clientY;
+    });
+    tray.addEventListener('mouseup', function(e) {
+      if (mouseDownY !== null) {
+        if (e.clientY - mouseDownY > 40) {
+          showControlCenter();
+        }
+      }
+      mouseDownY = null;
+    });
+    function showControlCenter() {
+      controlCenter.style.display = 'block';
+    }
+    function hideControlCenter() {
+      controlCenter.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

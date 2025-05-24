@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .settings-container {
+            max-width: 400px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 24px 0;
+        }
+        .settings-header {
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: #222;
+        }
+        .settings-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        .settings-item:hover {
+            background: #f0f0f0;
+        }
+        .settings-label {
+            font-size: 1.1em;
+            color: #333;
+        }
+        .settings-toggle {
+            width: 40px;
+            height: 22px;
+            background: #ccc;
+            border-radius: 11px;
+            position: relative;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .settings-toggle input {
+            display: none;
+        }
+        .settings-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: left 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .settings-toggle input:checked + .settings-toggle-slider {
+            left: 20px;
+            background: #4caf50;
+        }
+        .settings-toggle input:checked ~ .settings-toggle {
+            background: #4caf50;
+        }
+        .settings-link {
+            color: #888;
+            font-size: 1.2em;
+        }
+        .tray {
+          padding: 5px;
+          height: 18px;
+          background: #222;
+          color: #eee;
+          font-size: 1.1em;
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 1000;
+        }
+        .content-top-margin {
+          margin-top: 28px;
+        }
+        #control-center {
+          display:none;
+          position:fixed;
+          top:28px;
+          left:0;
+          width:100%;
+          background:rgba(34,34,34,0.98);
+          color:#fff;
+          z-index:2000;
+          box-shadow:0 4px 16px #000a;
+          border-bottom-left-radius:16px;
+          border-bottom-right-radius:16px;
+          padding:24px 0 16px 0;
+          text-align:center;
+        }
+    </style>
+  <script>
+    // Apply global display settings from localStorage (for all pages)
+    (function() {
+      try {
+        const settings = JSON.parse(localStorage.getItem('android100_display_settings') || '{}');
+        let filters = [];
+        if (settings.invert) filters.push('invert(1)');
+        if (settings.blur) filters.push('blur(4px)');
+        document.documentElement.style.filter = filters.join(' ') || '';
+        document.body.style.filter = '';
+        document.documentElement.style.transform = settings.rotate ? 'rotate(180deg)' : '';
+        if (settings.brightness) {
+          document.documentElement.style.background = `rgb(${245 - settings.brightness},${245 - settings.brightness},${245 - settings.brightness})`;
+          document.body.style.background = `rgb(${245 - settings.brightness},${245 - settings.brightness},${245 - settings.brightness})`;
+        }
+        if (settings.fontSize) {
+          document.documentElement.style.fontSize = settings.fontSize + 'px';
+          document.body.style.fontSize = settings.fontSize + 'px';
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+    <div class="tray" id="tray">
+      <span>[0%]</span>
+      <span>4G</span>
+      <span id="clock">--:--</span>
+    </div>
+    <div id="control-center">
+      <div style="max-width:400px; margin:0 auto;">
+        <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
+        <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:2em;">🏃‍➡️</div>
+            <div>Run</div>
+            <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
+          </div>
+          <div>
+            <div style="font-size:2em;">📶</div>
+            <div>Cellular Network</div>
+            <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
+          </div>
+          <div>
+            <div style="font-size:2em;">🔦</div>
+            <div>Flashlight</div>
+            <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
+          </div>
+          <div>
+            <div style="font-size:2em;">🔗</div>
+            <div>Software Update</div>
+            <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
+          </div>
+          <div>
+            <div style="font-size:2em;">🔎</div>
+            <div>Find</div>
+            <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
+          </div>
+        </div>
+        <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
+      </div>
+    </div>
+    <div class="content-top-margin">
+      <div class="settings-container">
+        <div class="settings-header">Settings</div>
+        <ul class="settings-list">
+            <li class="settings-item" onclick="alert('You live in North Korea\nso you cant access internet')">
+                <span class="settings-label">Wi-Fi</span>
+                <span class="settings-link">&#8250;</span>
+            </li>
+            <li class="settings-item">
+                <span class="settings-label">Bluetooth</span>
+                <label class="settings-toggle">
+                    <input type="checkbox" checked>
+                    <span class="settings-toggle-slider"></span>
+                </label>
+            </li>
+            <li class="settings-item">
+                <span class="settings-label">Notifications</span>
+                <label class="settings-toggle">
+                    <input type="checkbox">
+                    <span class="settings-toggle-slider"></span>
+                </label>
+            </li>
+            <li class="settings-item" onclick="window.location.href='display.html'">
+                <span class="settings-label">Display</span>
+                <span class="settings-link">&#8250;</span>
+            </li>
+            <li class="settings-item" onclick="alert('Theres no developer options here.\nYoure not a developer, youre here supposed to be our user bitch')">
+                <span class="settings-label">About phone</span>
+                <span class="settings-link">&#8250;</span>
+            </li>
+            <li class="settings-item" onclick="alert('Android100 just came out....\nWhy would you need an update?')">
+                <span class="settings-label">Software Update</span>
+                <span class="settings-link">&#8250;</span>
+            </li>
+            <li class="settings-item" onclick="localStorage.clear()">
+                <span class="settings-label">Reset to Default</span>
+            </li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      // Tray/Control Center logic from main.html
+      function updateClock() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        document.getElementById('clock').textContent = `${hours}:${minutes}`;
+      }
+      updateClock();
+      setInterval(updateClock, 60000);
+
+      let trayStartY = null;
+      const tray = document.getElementById('tray');
+      const controlCenter = document.getElementById('control-center');
+      tray.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 1) {
+          trayStartY = e.touches[0].clientY;
+        }
+      });
+      tray.addEventListener('touchend', function(e) {
+        if (trayStartY !== null && e.changedTouches.length === 1) {
+          let trayEndY = e.changedTouches[0].clientY;
+          if (trayEndY - trayStartY > 40) {
+            showControlCenter();
+          }
+        }
+        trayStartY = null;
+      });
+      let mouseDownY = null;
+      tray.addEventListener('mousedown', function(e) {
+        mouseDownY = e.clientY;
+      });
+      tray.addEventListener('mouseup', function(e) {
+        if (mouseDownY !== null) {
+          if (e.clientY - mouseDownY > 40) {
+            showControlCenter();
+          }
+        }
+        mouseDownY = null;
+      });
+      function showControlCenter() {
+        controlCenter.style.display = 'block';
+      }
+      function hideControlCenter() {
+        controlCenter.style.display = 'none';
+      }
+    </script>
+</body>
+</html>

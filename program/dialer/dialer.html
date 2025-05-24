@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Dialer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            height: 100vh;
+            margin: 0;
+        }
+        .dialer-container {
+            background: #fff;
+            padding: 18px 10px 24px 10px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 340px;
+            margin: 18px auto 0 auto;
+        }
+        .display {
+            width: 100%;
+            height: 48px;
+            font-size: 1.5em;
+            text-align: right;
+            margin-bottom: 18px;
+            border: none;
+            background: #f7f7f7;
+            border-radius: 8px;
+            padding: 8px 12px;
+            letter-spacing: 2px;
+        }
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin-bottom: 18px;
+            width: 100%;
+            max-width: 260px;
+        }
+        .key {
+            background: #e0e0e0;
+            border: none;
+            border-radius: 50%;
+            width: 100%;
+            aspect-ratio: 1/1;
+            font-size: 1.5em;
+            color: #333;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .key:active {
+            background: #bdbdbd;
+        }
+        .actions {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            width: 100%;
+        }
+        .call-btn, .delete-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 1.5em;
+            width: 56px;
+            height: 56px;
+            min-width: 0;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .call-btn {
+            background: #4caf50;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(76,175,80,0.2);
+        }
+        .call-btn:active {
+            background: #388e3c;
+        }
+        .delete-btn {
+            background: #f44336;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(244,67,54,0.2);
+        }
+        .delete-btn:active {
+            background: #c62828;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 24px auto 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 18px 0 8px 0;
+        }
+        .header {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #222;
+        }
+        .contacts-list {
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .contact {
+            background: #f7f7f7;
+            border-radius: 8px;
+            padding: 10px 18px;
+            color: #333;
+            font-size: 1em;
+            margin: 0 4px 8px 4px;
+            cursor: pointer;
+            border: 1px solid #eee;
+            transition: background 0.2s, color 0.2s;
+            min-width: 90px;
+            text-align: center;
+        }
+        .contact:active, .contact:hover {
+            background: #e0e0e0;
+            color: #222;
+        }
+
+        html, body {
+            height: 100%;
+        }
+        body {
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Dialer</div>
+        <ul class="contacts-list">
+            <li class="contact" onclick="fillNumber('08123456789')">Yo Momma</li>
+            <li class="contact" onclick="fillNumber('08888888888')">Red Ruby</li>
+            <li class="contact" onclick="fillNumber('14045')">Kim Jong Un</li>
+            <li class="contact" onclick="fillNumber('112')">George W Bush</li>
+        </ul>
+    </div>
+    <div class="dialer-container">
+        <input type="text" class="display" id="display" readonly placeholder="Enter number" />
+        <div class="keypad">
+            <button class="key" onclick="press('1')">1</button>
+            <button class="key" onclick="press('2')">2</button>
+            <button class="key" onclick="press('3')">3</button>
+            <button class="key" onclick="press('4')">4</button>
+            <button class="key" onclick="press('5')">5</button>
+            <button class="key" onclick="press('6')">6</button>
+            <button class="key" onclick="press('7')">7</button>
+            <button class="key" onclick="press('8')">8</button>
+            <button class="key" onclick="press('9')">9</button>
+            <button class="key" onclick="press('*')">*</button>
+            <button class="key" onclick="press('0')">0</button>
+            <button class="key" onclick="press('#')">#</button>
+        </div>
+        <div class="actions">
+            <button class="call-btn" onclick="callNumber()">&#128222;</button>
+            <button class="delete-btn" onclick="deleteNumber()">&#9003;</button>
+        </div>
+    </div>
+    <script>
+        function press(val) {
+            const display = document.getElementById('display');
+            display.value += val;
+        }
+        function deleteNumber() {
+            const display = document.getElementById('display');
+            display.value = display.value.slice(0, -1);
+        }
+        function callNumber() {
+            const display = document.getElementById('display');
+            if (display.value) {
+                alert('Calling ' + display.value + '...');
+            }
+        }
+        function fillNumber(num) {
+            document.getElementById('display').value = num;
+        }
+    </script>
+</body>
+</html>
