@@ -322,8 +322,6 @@
     updateClock();
     setInterval(updateClock, 60000);
 
-    date();
-    clock();
     updateClock();
     setInterval(updateClock, 60000);
     setInterval(clock, 60000);
@@ -348,6 +346,23 @@
     }
     window.addEventListener('DOMContentLoaded', function() {
       setTimeout(tryFullscreen, 300);
+    });
+
+        let swipeStartX = null;
+    document.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        swipeStartX = e.touches[0].clientX;
+      }
+    });
+    document.addEventListener('touchend', function(e) {
+      if (swipeStartX !== null && e.changedTouches.length === 1) {
+        let swipeEndX = e.changedTouches[0].clientX;
+        if (swipeEndX - swipeStartX > 30) { // swipe right threshold (lowered for easier testing)
+          console.log('Swipe right detected, redirecting to main.html');
+          window.location.href = "main.html";
+        }
+      }
+      swipeStartX = null;
     });
           
 

@@ -307,7 +307,7 @@
                 setTimeout(tryFullscreen, 300);
             });
 
-    // Swipe right to go to main2.html
+    // Swipe left to go to main2.html
     let swipeStartX = null;
     document.addEventListener('touchstart', function(e) {
       if (e.touches.length === 1) {
@@ -317,7 +317,7 @@
     document.addEventListener('touchend', function(e) {
       if (swipeStartX !== null && e.changedTouches.length === 1) {
         let swipeEndX = e.changedTouches[0].clientX;
-        if (swipeEndX - swipeStartX > 50) { // swipe right threshold
+        if (swipeStartX - swipeEndX > 50) { // swipe left threshold
           window.location.href = "main2.html";
         }
       }
