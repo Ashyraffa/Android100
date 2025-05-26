@@ -56,9 +56,66 @@
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }
+            .tray {
+                padding: 5px;
+                height: 18px;
+                background: #222;
+                color: #eee;
+                font-size: 1.1em;
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1000;
+            }
         </style>
     </head>
     <body>
+        <!-- Tray -->
+        <div class="tray" id="tray">
+            <span>[0%]</span>
+            <span>4G</span>
+            <span id="clock">--:--</span>
+        </div>
+        <!-- Control Center -->
+        <div id="control-center" style="display:none; position:fixed; top:28px; left:0; width:100%; background:rgba(34,34,34,0.98); color:#fff; z-index:2000; box-shadow:0 4px 16px #000a; border-bottom-left-radius:16px; border-bottom-right-radius:16px; padding:24px 0 16px 0; text-align:center;">
+            <div style="max-width:400px; margin:0 auto;">
+                <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
+                <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+                    <div>
+                        <div style="font-size:2em;">🏃‍➡️</div>
+                        <div>Run</div>
+                        <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
+                    </div>
+                    <div>
+                        <div style="font-size:2em;">📶</div>
+                        <div>Cellular Network</div>
+                        <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
+                    </div>
+                    <div>
+                        <div style="font-size:2em;">🔦</div>
+                        <div>Flashlight</div>
+                        <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
+                    </div>
+                    <div>
+                        <div style="font-size:2em;">🔗</div>
+                        <div>Software Update</div>
+                        <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
+                    </div>
+                    <div>
+                        <div style="font-size:2em;">🔎</div>
+                        <div>Find</div>
+                        <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
+                    </div>
+                </div>
+                <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
+            </div>
+        </div>
+        <br>
+        <br>
         <header>
             <button onclick="alert('This art was owned by Staceyy XOXO')">Who own this fanart? (Click to know)</button>
         </header>
@@ -73,6 +130,57 @@
         </video>
        </main>
         <script>
+        // Tray and Control Center logic
+        function showControlCenter() {
+            document.getElementById('control-center').style.display = 'block';
+        }
+        function hideControlCenter() {
+            document.getElementById('control-center').style.display = 'none';
+        }
+
+        // Tray swipe/click logic
+        let trayStartY = null;
+        const tray = document.getElementById('tray');
+        const controlCenter = document.getElementById('control-center');
+
+        tray.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 1) {
+                trayStartY = e.touches[0].clientY;
+            }
+        });
+        tray.addEventListener('touchend', function(e) {
+            if (trayStartY !== null && e.changedTouches.length === 1) {
+                let trayEndY = e.changedTouches[0].clientY;
+                if (trayEndY - trayStartY > 40) {
+                    showControlCenter();
+                }
+            }
+            trayStartY = null;
+        });
+
+        let mouseDownY = null;
+        tray.addEventListener('mousedown', function(e) {
+            mouseDownY = e.clientY;
+        });
+        tray.addEventListener('mouseup', function(e) {
+            if (mouseDownY !== null) {
+                if (e.clientY - mouseDownY > 40) {
+                    showControlCenter();
+                }
+            }
+            mouseDownY = null;
+        });
+
+        // Clock update
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        }
+        updateClock();
+        setInterval(updateClock, 60000);
+
         function changeVideo(src) {
             const video = document.getElementById('mainVideo');
             video.pause();
