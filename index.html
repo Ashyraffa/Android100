@@ -56,7 +56,7 @@
             }
         </style>
   <script>
-    // Apply global display settings from localStorage (for all pages)
+
     (function() {
       try {
         const settings = JSON.parse(localStorage.getItem('android100_display_settings') || '{}');
@@ -188,7 +188,7 @@
                 touchStartY = null;
             });
 
-            // Tray/Control Center logic
+      
             let trayStartY = null;
             const tray = document.getElementById('tray');
             const controlCenter = document.getElementById('control-center');
@@ -224,6 +224,29 @@
             function hideControlCenter() {
                 controlCenter.style.display = 'none';
             }
+
+      
+            function requestFullscreen() {
+                const el = document.documentElement;
+                if (el.requestFullscreen) el.requestFullscreen();
+                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+                else if (el.msRequestFullscreen) el.msRequestFullscreen();
+            }
+        
+            function tryFullscreen() {
+                requestFullscreen();
+            
+                function onUserGesture() {
+                    requestFullscreen();
+                    window.removeEventListener('click', onUserGesture);
+                    window.removeEventListener('touchstart', onUserGesture);
+                }
+                window.addEventListener('click', onUserGesture, { once: true });
+                window.addEventListener('touchstart', onUserGesture, { once: true });
+            }
+            window.addEventListener('DOMContentLoaded', function() {
+                setTimeout(tryFullscreen, 300);
+            });
         </script>
     </body>
 </html>

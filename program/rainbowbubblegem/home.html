@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Virtual Girl</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+        <style>
+            body {
+                background-color: #f0f0f0;
+                font-family: Arial, sans-serif;
+                height: 100vh;
+                margin: 0;  
+            }
+            header {
+                display: grid;
+                place-items: center;
+                background-color: gray;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+            }
+            header button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 16px;
+                border-radius: 15px;
+            }
+            nav {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin: 10px 0;
+            }
+            nav button {
+                background-color: white;
+                color: black;
+                border-radius: 15px;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #f0f0f0;
+            }
+            video {
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <button onclick="alert('This art was owned by Staceyy XOXO')">Who own this fanart? (Click to know)</button>
+        </header>
+        <nav>
+            <button onclick="changeVideo('orangeamber.mp4')">Orange Amber</button>
+            <button onclick="changeVideo('redruby.mp4')">Red Ruby</button>
+            <button onclick="changeVideo('purplestar.mp4')">Purple Star</button>
+        </nav>
+       <main>
+        <video id="mainVideo" autoplay muted loop style="width: 320px; height: 600px; object-fit: cover;">
+            <source src="orangeamber.mp4" type="video/mp4">
+        </video>
+       </main>
+        <script>
+        function changeVideo(src) {
+            const video = document.getElementById('mainVideo');
+            video.pause();
+            video.querySelector('source').src = src;
+            video.load();
+            video.play();
+        }
+       </script>
+    </body>
+</html>

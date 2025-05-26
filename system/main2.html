@@ -38,6 +38,78 @@
       padding: 0;
       margin: 0;
     }
+    /* Add for 2x2 widget */
+    .widget-2x2 {
+      grid-column: span 2;
+      grid-row: span 2;
+      width: 100%;
+      height: 100%;
+      min-height: 120px;
+      min-width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      background: rgba(255,255,255,0.18);
+      border-radius: 22px;
+      box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18), 0 1.5px 4px 0 rgba(0,0,0,0.10);
+      padding: 18px 20px 18px 20px;
+      margin: 10px 8px 10px 8px;
+      border: 1.5px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-sizing: border-box;
+      cursor: default;
+    }
+    .widget-2x2 .city-title {
+      font-size: 1.05em;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.02em;
+      margin-bottom: 2px;
+      opacity: 0.92;
+      text-align: left;
+    }
+    .widget-2x2 .icons {
+      width: 60px;
+      height: 60px;
+      font-size: 2.5em;
+      margin-bottom: 0;
+      margin-top: 2px;
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+      align-self: flex-start;
+      justify-content: flex-start;
+      color: #fff;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.10));
+    }
+    .widget-2x2 .weather-temp {
+      font-size: 2.1em;
+      font-weight: 600;
+      color: #fff;
+      margin-left: 70px;
+      margin-top: -48px;
+      margin-bottom: 0;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      letter-spacing: -1px;
+    }
+    .widget-2x2 .label {
+      font-size: 1em;
+      color: #fff;
+      margin-top: 8px;
+      margin-left: 2px;
+      text-align: left;
+      opacity: 0.85;
+    }
+    .widget-2x2 .weather-desc {
+      font-size: 0.95em;
+      color: #e0e0e0;
+      margin-top: 2px;
+      margin-left: 2px;
+      opacity: 0.7;
+      text-align: left;
+    }
 
     .app {
       display: flex;
@@ -148,69 +220,50 @@
       <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
     </div>
   </div>
+  <br>
   <div class="content-top-margin">
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="time-date">
-      <h2 id="date">Nothing...</h2>
-      <h1 id="time">--:--</h1>
-    </div>
 
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <div class="grid">
-      <div class="app" onclick="openApp('../program/manifesto/manifesto.html')">
-        <div class="icon">☯</div>
-        <div class="label">Manifesto</div>
+        <div class="grid">
+      <div class="app widget-2x2">
+        <div class="city-title">Pyongyang</div>
+        <div class="icons">☀️</div>
+        <div class="weather-temp">22°C</div>
+        <div class="weather-desc">Sunny</div>
       </div>
-      <div class="app" onclick="openApp('../index.html')">
-        <div class="icon">🔐</div>
-        <div class="label">Lock This Phone</div>
+      <!-- Filler for 2x2 grid alignment -->
+      <div class="app" style="visibility:hidden"></div>
+      <div class="app" style="visibility:hidden"></div>
+      <!-- Normal app icons -->
+      <div class="app" onclick="openApp('main.html')">
+        <div class="icon">🏠</div>
+        <div class="label">Home Screen</div>
       </div>
-      <div class="app" onclick="openApp('../program/messages/messages.html')">
-        <div class="icon">📓</div>
-        <div class="label">Messages</div>
+      <div class="app" onclick="openApp('../program/rainbowbubblegem/home.html')">
+        <div class="icon">🧜‍♀️</div>
+        <div class="label">Virtual Girl</div>
       </div>
-      <div class="app" onclick="openApp('../program/premierenoob/premierenoob.html')">
-        <div class="icon">🎞️</div>
-        <div class="label">Adoozy Premiere Noob</div>
-      </div>
-    </div>
-  </div>
-  
+  </div> 
 
   <br>
 
-      <div class="grid">
-      <div class="app" onclick="openApp('../program/notron/notronvirus.html')">
-        <div class="icon">🛡️</div>
-        <div class="label">NoTron Virus</div>
+        <div class="grid">
+      <div class="app" onclick="openApp('../program/mediaplayer/mediaplayer.html')">
+        <div class="icon">📺</div>
+        <div class="label">Media Player</div>
       </div>
-      <div class="app" onclick="openApp('../program/welcomecenter/welcomecenter.html')">
-        <div class="icon">📱</div>
-        <div class="label">Welcome Center</div>
+      <div class="app" onclick="openApp('../program/button/button.html')">
+        <div class="icon">🔘</div>
+        <div class="label">Button</div>
       </div>
-      <div class="app" onclick="openApp('../program/word2100/word2100.html')">
-        <div class="icon">📄</div>
-        <div class="label">Word 2100</div>
+      <div class="app" onclick="openApp('../program/calculator/calculator.html')">
+        <div class="icon">🧮</div>
+        <div class="label">Calculator</div>
       </div>
-      <div class="app" onclick="openApp('../system/settings/settings.html')">
-        <div class="icon">⚛️</div>
-        <div class="label">Settings</div>
-      </div>
-    </div>
   </div>
-
-  <br>
 
   <footer>
     <div style="display: flex; justify-content: center; align-items: center; gap: 30px;">
-      <div class="app" onclick="openApp('../program/dialer/dialer.html')">
+      <div class="app" onclick="openApp('../program/notron/notronvirus.html')">
         <div class="icon">📞</div>
       </div>
       <div class="app" onclick="openApp('../program/browser/browser.html')">
@@ -218,15 +271,7 @@
       </div>
     </div>
   </footer>
-
-  
-  <script src="script.js"></script>
-  <script>
-    function openApp(page) {
-      window.location.href = page;
-    }
-
-
+<script>
    
     let trayStartY = null;
     const tray = document.getElementById('tray');
@@ -247,7 +292,6 @@
       trayStartY = null;
     });
 
-  
     let mouseDownY = null;
     tray.addEventListener('mousedown', function(e) {
       mouseDownY = e.clientY;
@@ -268,7 +312,7 @@
       controlCenter.style.display = 'none';
     }
 
-        function updateClock() {
+    function updateClock() {
       const now = new Date();
       const hours = now.getHours().toString().padStart(2, '0');
       const minutes = now.getMinutes().toString().padStart(2, '0');
@@ -284,45 +328,33 @@
     setInterval(updateClock, 60000);
     setInterval(clock, 60000);
 
-              
-            function requestFullscreen() {
-                const el = document.documentElement;
-                if (el.requestFullscreen) el.requestFullscreen();
-                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-                else if (el.msRequestFullscreen) el.msRequestFullscreen();
-            }
-            
-            function tryFullscreen() {
-                requestFullscreen();
- 
-                function onUserGesture() {
-                    requestFullscreen();
-                    window.removeEventListener('click', onUserGesture);
-                    window.removeEventListener('touchstart', onUserGesture);
-                }
-                window.addEventListener('click', onUserGesture, { once: true });
-                window.addEventListener('touchstart', onUserGesture, { once: true });
-            }
-            window.addEventListener('DOMContentLoaded', function() {
-                setTimeout(tryFullscreen, 300);
-            });
+    function requestFullscreen() {
+      const el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (el.msRequestFullscreen) el.msRequestFullscreen();
+    }
 
-    // Swipe right to go to main2.html
-    let swipeStartX = null;
-    document.addEventListener('touchstart', function(e) {
-      if (e.touches.length === 1) {
-        swipeStartX = e.touches[0].clientX;
+    function tryFullscreen() {
+      requestFullscreen();
+
+      function onUserGesture() {
+        requestFullscreen();
+        window.removeEventListener('click', onUserGesture);
+        window.removeEventListener('touchstart', onUserGesture);
       }
+      window.addEventListener('click', onUserGesture, { once: true });
+      window.addEventListener('touchstart', onUserGesture, { once: true });
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(tryFullscreen, 300);
     });
-    document.addEventListener('touchend', function(e) {
-      if (swipeStartX !== null && e.changedTouches.length === 1) {
-        let swipeEndX = e.changedTouches[0].clientX;
-        if (swipeEndX - swipeStartX > 50) { // swipe right threshold
-          window.location.href = "main2.html";
-        }
-      }
-      swipeStartX = null;
-    });
+          
+
+    function openApp(page) {
+      window.location.href = page;
+    }
+
   </script>
-</body>
+</body>     
 </html>
