@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            header {
+                background-color: #f8f8f8;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            nav ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: left;
+                gap: 20px;
+            }
+            nav li {
+                font-size: 16px;
+                color: #333;
+            }
+            main img {
+                display: grid;
+                place-items: center;
+                margin: 20px auto;
+                width: 80%;
+                max-width: 400px;
+                display: block;
+                height: auto;
+                object-fit: cover;
+                animation: rotate 1.5s linear infinite;
+            }
+            @keyframes rotate {
+                0% { transform: rotate(0deg);}
+                100% { transform: rotate(360deg);}
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li>iPhone</li>
+                    <li>Welcome to www.apple.com</li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <h1>New! From Apple!</h1>
+            <h1>A new iPhone!</h1>
+            <p>Just to make your current one obsolete!</p>
+            <br>
+            <img src="apple-iphone-16-pro-max.webp" alt="iPhone 16">
+            <br>
+            <p style="font-size: 18px;">It's the iPhone 16 Noob Max[®]</p>
+        </main>
+    </body>
+</html>

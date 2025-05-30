@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Media Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #222;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .player {
+            background: #333;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+            width: 100%;
+            max-width: 400px;
+        }
+        button {
+            background: #00ff88;
+            color: #181818;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .controls button,
+        .controls input[type="range"] {
+            font-size: 1.1em;
+            min-width: 44px;
+            min-height: 44px;
+        }
+        input[type="range"] {
+            width: 100%;
+            max-width: 200px;
+            box-sizing: border-box;
+            touch-action: none;
+        }
+        .file-input {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .time {
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .tray {
+            padding: 5px;
+            height: 18px;
+            background: #222;
+            color: #eee;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        #control-center {
+            display: none;
+            position: fixed;
+            top: 28px;
+            left: 0;
+            width: 100%;
+            background: rgba(34,34,34,0.98);
+            color: #fff;
+            z-index: 2000;
+            box-shadow: 0 4px 16px #000a;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            padding: 24px 0 16px 0;
+            text-align: center;
+        }
+        @media (max-width: 500px) {
+            .player {
+                padding: 16px 6vw;
+                border-radius: 8px;
+                min-width: unset;
+                max-width: 98vw;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+            .controls button,
+            .controls input[type="range"] {
+                width: 100%;
+                font-size: 1.2em;
+            }
+            .file-input {
+                width: 100%;
+            }
+            .time {
+                font-size: 1em;
+            }
+        }
+        @media (max-width: 350px) {
+            .player {
+                padding: 8px 2vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tray and Control Center -->
+    <div class="tray" id="tray">
+        <span>[0%]</span>
+        <span>4G</span>
+        <span id="clock">--:--</span>
+    </div>
+    <div id="control-center">
+        <div style="max-width:400px; margin:0 auto;">
+            <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
+            <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+                <div>
+                    <div style="font-size:2em;">🏃‍➡️</div>
+                    <div>Run</div>
+                    <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
+                </div>
+                <div>
+                    <div style="font-size:2em;">📶</div>
+                    <div>Cellular Network</div>
+                    <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
+                </div>
+                <div>
+                    <div style="font-size:2em;">🔦</div>
+                    <div>Flashlight</div>
+                    <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
+                </div>
+                <div>
+                    <div style="font-size:2em;">🔗</div>
+                    <div>Software Update</div>
+                    <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
+                </div>
+                <div>
+                    <div style="font-size:2em;">🔎</div>
+                    <div>Find</div>
+                    <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
+                </div>
+            </div>
+            <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
+        </div>
+    </div>
+    <div class="player">
+        <select id="fileSelect" class="file-input">
+            <option value="" disabled selected>Select a song</option>
+            <option value="media/Boogie Party.mp3">Boogie Party</option>
+            <option value="media/SCP-x1x.mp3">SCP-X1X</option>
+            <option value="media/Neon Laser Horizon.mp3">Neon Laser Horizon</option>
+            <option value="media/Mesmerizing Galaxy Loop.mp3">Mesmerizing Galaxy Loop</option>
+        </select>
+        <audio id="audio" preload="auto"></audio>
+        <div class="controls">
+            <button id="play">Play</button>
+            <button id="pause">Pause</button>
+            <input type="range" id="seek" value="0" min="0" max="100">
+            <label>Volume Rocker</label>
+            <input type="range" id="volume" min="0" max="1" step="0.01" value="1" title="Volume">
+        </div>
+        <div class="time">
+            <span id="current">00:00</span> / <span id="duration">00:00</span>
+        </div>
+        <br>
+        <label>If your song isnt playing, it'll likely still need to <br> load first. Or that you havent pressed Play.</label>
+        <br>
+        <br>
+        <label>All songs are royalty-free from Incompetech.</label>
+    </div>
+    <script>
+        // Tray & Control Center JS
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        }
+        updateClock();
+        setInterval(updateClock, 60000);
+
+        let trayStartY = null;
+        const tray = document.getElementById('tray');
+        const controlCenter = document.getElementById('control-center');
+        tray.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 1) {
+                trayStartY = e.touches[0].clientY;
+            }
+        });
+        tray.addEventListener('touchend', function(e) {
+            if (trayStartY !== null && e.changedTouches.length === 1) {
+                let trayEndY = e.changedTouches[0].clientY;
+                if (trayEndY - trayStartY > 40) {
+                    showControlCenter();
+                }
+            }
+            trayStartY = null;
+        });
+        let mouseDownY = null;
+        tray.addEventListener('mousedown', function(e) {
+            mouseDownY = e.clientY;
+        });
+        tray.addEventListener('mouseup', function(e) {
+            if (mouseDownY !== null) {
+                if (e.clientY - mouseDownY > 40) {
+                    showControlCenter();
+                }
+            }
+            mouseDownY = null;
+        });
+        function showControlCenter() {
+            controlCenter.style.display = 'block';
+        }
+        function hideControlCenter() {
+            controlCenter.style.display = 'none';
+        }
+
+        const audio = document.getElementById('audio');
+        const playBtn = document.getElementById('play');
+        const pauseBtn = document.getElementById('pause');
+        const seek = document.getElementById('seek');
+        const volume = document.getElementById('volume');
+        const fileSelect = document.getElementById('fileSelect');
+        const current = document.getElementById('current');
+        const duration = document.getElementById('duration');
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        fileSelect.addEventListener('change', function() {
+            const file = this.value;
+            if (file) {
+                audio.src = file;
+                audio.load();
+                playBtn.disabled = false;
+                pauseBtn.disabled = false;
+            }
+        });
+
+        playBtn.addEventListener('click', () => audio.play());
+        pauseBtn.addEventListener('click', () => audio.pause());
+
+        audio.addEventListener('loadedmetadata', () => {
+            seek.max = Math.floor(audio.duration);
+            duration.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            seek.value = Math.floor(audio.currentTime);
+            current.textContent = formatTime(audio.currentTime);
+        });
+
+        seek.addEventListener('input', () => {
+            audio.currentTime = seek.value;
+        });
+
+        volume.addEventListener('input', () => {
+            audio.volume = volume.value;
+        });
+
+        // Disable controls until file is loaded
+        playBtn.disabled = true;
+        pauseBtn.disabled = true;
+    </script>
+</body>
+</html>
