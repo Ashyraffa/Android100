@@ -9,7 +9,7 @@
     body {
       margin: 0;
       padding: 0;
-      background: url('wallpaper/forest.jpg') no-repeat center center fixed;
+      background: url('wallpaper/wallpaper.png') no-repeat center center fixed;
       background-size: cover;
       font-family: 'Segoe UI', sans-serif;
       color: #fff;
@@ -235,11 +235,11 @@
       <div class="app" style="visibility:hidden"></div>
       <!-- Normal app icons -->
       <div class="app" onclick="openApp('main.html')">
-        <div class="icon">🏠</div>
+        <div class="icon"><img src="home-button.png" width="50" height="50"></div>
         <div class="label">Home Screen</div>
       </div>
       <div class="app" onclick="openApp('../program/rainbowbubblegem/home.html')">
-        <div class="icon">🧜‍♀️</div>
+        <div class="icon"><img src="girl.png" width="50" height="50"></div>
         <div class="label">Find My Girl</div>
       </div>
   </div> 
@@ -248,27 +248,29 @@
 
         <div class="grid">
       <div class="app" onclick="openApp('../program/mediaplayer/mediaplayer.html')">
-        <div class="icon">📺</div>
+        <div class="icon"><img src="media.png" width="50" height="50"></div>
         <div class="label">Media Player</div>
       </div>
       <div class="app" onclick="openApp('../program/button/button.html')">
-        <div class="icon">🔘</div>
+        <div class="icon"><img src="button.png" width="50" height="50"></div>
         <div class="label">Button</div>
       </div>
       <div class="app" onclick="openApp('../program/calculator/calculator.html')">
-        <div class="icon">🧮</div>
+        <div class="icon"><img src="calculator.png" width="50" height="50"></div>
         <div class="label">Calculator</div>
       </div>
-  </div>
+
 
   <footer>
     <div style="display: flex; justify-content: center; align-items: center; gap: 30px;">
-      <div class="app" onclick="openApp('../program/notron/notronvirus.html')">
-        <div class="icon">📞</div>
+      <div class="app" onclick="openApp('../program/dialer/dialer.html')">
+        <div class="icon"><img src="app.png" width="50" height="50"></div>
       </div>
       <div class="app" onclick="openApp('../program/browser/browser.html')">
-        <div class="icon">🌐</div>
+        <div class="icon"><img src="world.png" width="50" height="50"></div>
       </div>
+      <div class="app" onclick="openApp('../program/camera/camera.html')">
+        <div class="icon"><img src="photo.png" width="50" height="50"></div>
     </div>
   </footer>
 <script>

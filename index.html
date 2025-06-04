@@ -16,7 +16,7 @@
             }
             body {
                 min-height: 100vh;
-                background-image: url('forest.jpg');
+                background-image: url('wallpaper.png');
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -172,6 +172,10 @@
             setInterval(updateClock, 60000);
             setInterval(clock, 60000);
 
+
+
+
+            // Swipe up to unlock
             let touchStartY = null;
             document.addEventListener('touchstart', function(e) {
                 if (e.touches.length === 1) {
@@ -181,14 +185,20 @@
             document.addEventListener('touchend', function(e) {
                 if (touchStartY !== null && e.changedTouches.length === 1) {
                     let touchEndY = e.changedTouches[0].clientY;
-                    if (touchStartY - touchEndY > 50) { 
-                        window.location.href = "system/main.html";
+                    if (touchStartY - touchEndY > 50) {
+                        // Check for password
+                        if (localStorage.getItem('android100_password')) {
+                            showLockScreen(function() {
+                                window.location.href = "system/main.html";
+                            });
+                        } else {
+                            window.location.href = "system/main.html";
+                        }
                     }
                 }
                 touchStartY = null;
             });
 
-      
             let trayStartY = null;
             const tray = document.getElementById('tray');
             const controlCenter = document.getElementById('control-center');
