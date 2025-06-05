@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Android100 Wiki</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f7f7f7; }
+        header { background: #3ddc84; color: #fff; padding: 1.5em 1em; }
+        h1 { margin: 0; font-size: 2em; }
+        nav {
+            background: #222;
+            color: #fff;
+            padding: 1em;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        nav a {
+            color: #fff;
+            margin-right: 1em;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1em;
+            padding: 0.5em 0.7em;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        nav a:hover, nav a:focus {
+            background: #3ddc84;
+            color: #222;
+        }
+        main {
+            max-width: 900px;
+            margin: 2em auto;
+            background: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        section { margin-bottom: 2em; }
+        h2 { color: #3ddc84; font-size: 1.3em; }
+        ul { line-height: 1.7; padding-left: 1.2em; }
+        code, pre { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.97em; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1em;
+        }
+        th, td {
+            padding: 0.7em 0.5em;
+            text-align: left;
+        }
+        th {
+            background: #f0f0f0;
+        }
+        tr:nth-child(even) td {
+            background: #fafafa;
+        }
+        footer { text-align: center; color: #888; padding: 1em 0; font-size: 0.95em; }
+
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            header { padding: 1em 0.7em; }
+            h1 { font-size: 1.3em; }
+            nav { padding: 0.7em 0.3em; font-size: 0.98em; }
+            main {
+                margin: 1em 0.3em;
+                padding: 1em 0.7em;
+                border-radius: 0;
+            }
+            section { margin-bottom: 1.2em; }
+            h2 { font-size: 1.1em; }
+            ul { font-size: 0.98em; }
+            table, thead, tbody, th, td, tr {
+                display: block;
+                width: 100%;
+            }
+            thead {
+                display: none;
+            }
+            tr {
+                margin-bottom: 1em;
+                border-bottom: 1px solid #eee;
+            }
+            td {
+                padding: 0.5em 0.3em;
+                text-align: left;
+                position: relative;
+            }
+            td:before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: block;
+                color: #3ddc84;
+                margin-bottom: 0.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Android100 Wiki</h1>
+        <p>Welcome to the Android100 project! This wiki provides an overview of the project, its features, and how to get started.</p>
+    </header>
+    <nav>
+        <a href="#overview">Overview</a>
+        <a href="#structure">Project Structure</a>
+        <a href="#features">Features</a>
+    </nav>
+    <main>
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>
+                <strong>Android100</strong> is a hilarious project based on Android operating system, designed to run on web browsers. It is a parody of the Android ecosystem, featuring a collection of built-in apps and a unique user interface that mimics the look and feel of Android devices.
+                Taking an inspiration from Windows Doors and Windows 93, and bringing the all memes and jokes to mobile platform.
+                So welcome to Android 100.
+            </p>
+        </section>
+
+        <section id="structure">
+            <h2>Project Structure</h2>
+            <ul>
+                <li><code>/program</code> Android100 built-in apps were stored here.</li>
+                <li><code>/system</code> Storing crucial files, such as launcher, icons, etc</li>
+            </ul>
+        </section>
+
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>A working camera</li>
+                <li>Hilarious chatbot</li>
+                <li>Working Browser</li>
+                <li>Calculator</li>
+                <li>Mini Games such as SquareFight</li>
+            </ul>
+        </section>
+
+
+        <section id="table">
+            <h2>Here are the minimum browsers required to run Android100:</h2>
+            <table border="1" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th>Browser</th>
+                        <th>Minimum Version</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Browser">Google Chrome</td>
+                        <td data-label="Minimum Version">49+ or higher</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Browser">Mozilla Firefox</td>
+                        <td data-label="Minimum Version">52+ or higher</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Browser">Microsoft Edge</td>
+                        <td data-label="Minimum Version">16+ or higher</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Browser">Safari</td>
+                        <td data-label="Minimum Version">iOS 10+ or higher</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Browser">Opera</td>
+                        <td data-label="Minimum Version">36+ or higher</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        &copy; 2025 Android100 Project. All rights reserved.
+    </footer>
+</body>
+</html>
