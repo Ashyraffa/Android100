@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2D Fighting Game</title>
+    <style>
+        body { background: #222; margin: 0; overflow: hidden; }
+        canvas { display: block; margin: 0 auto; background: #333; }
+        #info { color: #fff; text-align: center; font-family: sans-serif; }
+        .mobile-controls {
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            height: 40vw;
+            min-height: 120px;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .mc-btn {
+            position: absolute;
+            width: 16vw; height: 16vw;
+            min-width: 48px; min-height: 48px;
+            max-width: 90px; max-height: 90px;
+            border-radius: 50%;
+            background: #fff4;
+            border: 2px solid #fff8;
+            color: #fff;
+            font-size: 2em;
+            text-align: center;
+            line-height: 16vw;
+            user-select: none;
+            pointer-events: auto;
+            touch-action: none;
+        }
+        .mc-btn:active { background: #fff8; }
+        .landscape-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: #222d;
+            color: #fff;
+            font-size: 2em;
+            font-family: sans-serif;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            pointer-events: all;
+        }
+        .landscape-overlay.active {
+            display: flex;
+        }
+        .start-overlay {
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: #222;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 2em;
+            transition: opacity 0.3s;
+        }
+        .start-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .start-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 0.5em;
+            letter-spacing: 2px;
+        }
+        .start-btn {
+            margin-top: 2em;
+            padding: 0.5em 2em;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 0.5em;
+            background: #4af;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #0008;
+            transition: background 0.2s;
+        }
+        .start-btn:active {
+            background: #248;
+        }
+        /* Hide game and controls until started */
+        .hidden-game {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="start-overlay" id="startOverlay">
+        <div class="start-title">SquareFight</div>
+        <button class="start-btn" id="startBtn">Start</button>
+    </div>
+    <canvas id="game" width="800" height="400" class="hidden-game"></canvas>
+    <div class="mobile-controls hidden-game" id="mobileControls">
+        <!-- Player 1 controls (left side) -->
+        <div class="mc-btn" id="p1-left"   style="left:4vw;  bottom:8vw;">&#8592;</div>
+        <div class="mc-btn" id="p1-right"  style="left:20vw; bottom:8vw;">&#8594;</div>
+        <div class="mc-btn" id="p1-up"     style="left:12vw; bottom:20vw;">&#8593;</div>
+        <div class="mc-btn" id="p1-attack" style="left:32vw; bottom:12vw; background:#4af8;">Attack</div>
+        <!-- Player 2 controls (right side) -->
+        <div class="mc-btn" id="p2-left"   style="right:20vw; bottom:8vw;">&#8592;</div>
+        <div class="mc-btn" id="p2-right"  style="right:4vw;  bottom:8vw;">&#8594;</div>
+        <div class="mc-btn" id="p2-up"     style="right:12vw; bottom:20vw;">&#8593;</div>
+        <div class="mc-btn" id="p2-attack" style="right:32vw; bottom:12vw; background:#fa48;">Attack</div>
+    </div>
+    <div class="landscape-overlay" id="landscapeOverlay">
+        Please rotate your device<br>to landscape mode to play.
+    </div>
+    <script>
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+
+        // Player template
+        function createPlayer(x, color, controls) {
+            return {
+                x: x,
+                y: 300,
+                w: 40,
+                h: 80,
+                color: color,
+                vx: 0,
+                vy: 0,
+                speed: 4,
+                jumping: false,
+                health: 100,
+                attack: false,
+                facing: 1,
+                controls: controls
+            };
+        }
+
+        // Remove keyboard controls, use only on-screen controls
+        const keys = {};
+
+        // On-screen controls mapping
+        const btnMap = {
+            'p1-left':   'p1-left',
+            'p1-right':  'p1-right',
+            'p1-up':     'p1-up',
+            'p1-attack': 'p1-attack',
+            'p2-left':   'p2-left',
+            'p2-right':  'p2-right',
+            'p2-up':     'p2-up',
+            'p2-attack': 'p2-attack'
+        };
+
+        Object.keys(btnMap).forEach(id => {
+            const code = btnMap[id];
+            const btn = document.getElementById(id);
+            let pressed = false;
+
+            // Touch events
+            btn.addEventListener('touchstart', e => {
+                e.preventDefault();
+                keys[code] = true;
+                pressed = true;
+            });
+            btn.addEventListener('touchend', e => {
+                e.preventDefault();
+                keys[code] = false;
+                pressed = false;
+            });
+            btn.addEventListener('touchcancel', e => {
+                keys[code] = false;
+                pressed = false;
+            });
+
+            // Mouse events for desktop debugging
+            btn.addEventListener('mousedown', e => {
+                e.preventDefault();
+                keys[code] = true;
+                pressed = true;
+            });
+            btn.addEventListener('mouseup', e => {
+                e.preventDefault();
+                keys[code] = false;
+                pressed = false;
+            });
+            btn.addEventListener('mouseleave', e => {
+                keys[code] = false;
+                pressed = false;
+            });
+        });
+
+        // Players (use new control codes)
+        const player1 = createPlayer(100, '#4af', {
+            left: 'p1-left', right: 'p1-right', up: 'p1-up', attack: 'p1-attack'
+        });
+        const player2 = createPlayer(660, '#fa4', {
+            left: 'p2-left', right: 'p2-right', up: 'p2-up', attack: 'p2-attack'
+        });
+
+        function updatePlayer(p, opponent) {
+            // Movement
+            if (keys[p.controls.left]) { p.vx = -p.speed; p.facing = -1; }
+            else if (keys[p.controls.right]) { p.vx = p.speed; p.facing = 1; }
+            else { p.vx = 0; }
+
+            // Jump
+            if (keys[p.controls.up] && !p.jumping) {
+                p.vy = -10;
+                p.jumping = true;
+            }
+
+            // Attack
+            if (keys[p.controls.attack]) p.attack = true;
+            else p.attack = false;
+
+            // Apply gravity
+            p.vy += 0.5;
+            p.x += p.vx;
+            p.y += p.vy;
+
+            // Ground collision
+            if (p.y + p.h > 380) {
+                p.y = 380 - p.h;
+                p.vy = 0;
+                p.jumping = false;
+            }
+
+            // Boundaries
+            p.x = Math.max(0, Math.min(canvas.width - p.w, p.x));
+
+            // Attack logic
+            if (p.attack) {
+                const attackRange = 30;
+                const ax = p.facing === 1 ? p.x + p.w : p.x - attackRange;
+                const aw = attackRange;
+                if (
+                    ax < opponent.x + opponent.w &&
+                    ax + aw > opponent.x &&
+                    p.y < opponent.y + opponent.h &&
+                    p.y + p.h > opponent.y
+                ) {
+                    opponent.health -= 0.5;
+                }
+            }
+        }
+
+        function drawPlayer(p) {
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x, p.y, p.w, p.h);
+            // Attack effect
+            if (p.attack) {
+                ctx.fillStyle = '#fff8';
+                const attackRange = 30;
+                const ax = p.facing === 1 ? p.x + p.w : p.x - attackRange;
+                ctx.fillRect(ax, p.y + 20, attackRange, 20);
+            }
+        }
+
+        function drawHealthBar(p, x, y) {
+            ctx.fillStyle = '#444';
+            ctx.fillRect(x, y, 200, 20);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(x, y, 2 * p.health, 20);
+            ctx.strokeStyle = '#fff';
+            ctx.strokeRect(x, y, 200, 20);
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update
+            updatePlayer(player1, player2);
+            updatePlayer(player2, player1);
+
+            // Draw
+            drawPlayer(player1);
+            drawPlayer(player2);
+
+            // Health bars
+            drawHealthBar(player1, 20, 20);
+            drawHealthBar(player2, 580, 20);
+
+            // Game over
+            if (player1.health <= 0 || player2.health <= 0) {
+                ctx.fillStyle = '#fff';
+                ctx.font = '48px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(
+                    player1.health <= 0 ? 'Player 2 Wins!' : 'Player 1 Wins!',
+                    canvas.width / 2, canvas.height / 2
+                );
+            } else {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // Force landscape overlay for phones/tablets
+        function checkLandscape() {
+            // Only show on touch devices (phones/tablets)
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (!isTouch) {
+                document.getElementById('landscapeOverlay').classList.remove('active');
+                return;
+            }
+            // Use window.innerWidth/innerHeight for orientation
+            if (window.innerWidth < window.innerHeight) {
+                document.getElementById('landscapeOverlay').classList.add('active');
+            } else {
+                document.getElementById('landscapeOverlay').classList.remove('active');
+            }
+        }
+        window.addEventListener('resize', checkLandscape);
+        window.addEventListener('orientationchange', checkLandscape);
+        window.addEventListener('DOMContentLoaded', checkLandscape);
+
+        // Hide game and controls until "Start" is pressed
+        function showGame() {
+            document.getElementById('startOverlay').classList.add('hidden');
+            // document.getElementById('info').classList.remove('hidden-game'); // REMOVE or comment out this line
+            document.getElementById('game').classList.remove('hidden-game');
+            document.getElementById('mobileControls').classList.remove('hidden-game');
+            // Start game loop if not already started
+            if (!window._gameStarted) {
+                window._gameStarted = true;
+                gameLoop();
+            }
+        }
+        document.getElementById('startBtn').addEventListener('click', showGame);
+    </script>
+</body>
+</html>
