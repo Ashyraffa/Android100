@@ -106,6 +106,7 @@
       padding:24px 0 16px 0;
       text-align:center;
     }
+    
   </style>
 </head>
 <body>
@@ -235,61 +236,7 @@
       controlCenter.style.display = 'none';
     }
     // Utility: Save and load settings to localStorage for global effect
-    function saveDisplaySettings() {
-      const settings = {
-        invert: document.getElementById('invert-toggle').checked,
-        blur: document.getElementById('blur-toggle').checked,
-        rotate: document.getElementById('rotate-toggle').checked,
-        brightness: document.getElementById('brightness-slider').value,
-        fontSize: document.getElementById('font-slider').value
-      };
-      localStorage.setItem('android100_display_settings', JSON.stringify(settings));
-    }
 
-    function loadDisplaySettings() {
-      const settings = JSON.parse(localStorage.getItem('android100_display_settings') || '{}');
-      if ('invert' in settings) document.getElementById('invert-toggle').checked = settings.invert;
-      if ('blur' in settings) document.getElementById('blur-toggle').checked = settings.blur;
-      if ('rotate' in settings) document.getElementById('rotate-toggle').checked = settings.rotate;
-      if ('brightness' in settings) document.getElementById('brightness-slider').value = settings.brightness;
-      if ('fontSize' in settings) document.getElementById('font-slider').value = settings.fontSize;
-    }
-
-    function updateGlobalEffects() {
-      let filters = [];
-      if (document.getElementById('invert-toggle').checked) filters.push('invert(1)');
-      if (document.getElementById('blur-toggle').checked) filters.push('blur(4px)');
-      document.documentElement.style.filter = filters.join(' ') || '';
-      document.body.style.filter = ''; // Remove from body, use html for global
-      document.documentElement.style.transform = document.getElementById('rotate-toggle').checked ? 'rotate(180deg)' : '';
-      saveDisplaySettings();
-    }
-
-    // Simulate brightness by changing html background
-    document.getElementById('brightness-slider').addEventListener('input', function(e) {
-      const val = e.target.value;
-      document.documentElement.style.background = `rgb(${245 - val},${245 - val},${245 - val})`;
-      document.body.style.background = `rgb(${245 - val},${245 - val},${245 - val})`;
-      saveDisplaySettings();
-    });
-
-    // Simulate font size globally
-    document.getElementById('font-slider').addEventListener('input', function(e) {
-      document.documentElement.style.fontSize = e.target.value + 'px';
-      document.body.style.fontSize = e.target.value + 'px';
-      saveDisplaySettings();
-    });
-
-    // Fun options (global)
-    document.getElementById('invert-toggle').addEventListener('change', updateGlobalEffects);
-    document.getElementById('blur-toggle').addEventListener('change', updateGlobalEffects);
-    document.getElementById('rotate-toggle').addEventListener('change', updateGlobalEffects);
-
-    // Load settings on page load
-    loadDisplaySettings();
-    updateGlobalEffects();
-    document.getElementById('brightness-slider').dispatchEvent(new Event('input'));
-    document.getElementById('font-slider').dispatchEvent(new Event('input'));
   </script>
 </body>
 </html>

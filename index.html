@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,6 +54,27 @@
                 padding:24px 0 16px 0;
                 text-align:center;
             }
+                #control-center {
+      /* ...existing code... */
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1), opacity 0.25s;
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    #control-center.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+            .swipe-container {
+      position: relative;
+      width: 100vw;
+      min-height: 100vh;
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+      will-change: transform;
+      background: none;
+    }
+    .swipe-up-anim {
+      transform: translateY(-100vh);
+    }
         </style>
   <script>
 
@@ -79,44 +100,44 @@
   </script>
     </head>
     <body>
-        <div class="tray" id="tray">
-            <span>[0%]</span>
-            <span>4G</span>
-            <span id="clock">--:--</span>
+  <div class="tray" id="tray">
+    <span>[0%]</span>
+    <span>4G</span>
+    <span id="clock">--:--</span>
+  </div>
+  <div id="control-center" style="display:none; position:fixed; top:28px; left:0; width:100%; background:rgba(34,34,34,0.98); color:#fff; z-index:2000; box-shadow:0 4px 16px #000a; border-bottom-left-radius:16px; border-bottom-right-radius:16px; padding:24px 0 16px 0; text-align:center;">
+    <div style="max-width:400px; margin:0 auto;">
+      <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
+      <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:2em;">🏃‍➡️</div>
+          <div>Run</div>
+          <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
         </div>
-        <div id="control-center">
-            <div style="max-width:400px; margin:0 auto;">
-                <div style="font-size:1.2em; margin-bottom:12px; color:#00ff88;">Control Center</div>
-                <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
-                    <div>
-                        <div style="font-size:2em;">🏃‍➡️</div>
-                        <div>Run</div>
-                        <button onclick="alert('There is nowhere you can run')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Run</button>
-                    </div>
-                    <div>
-                        <div style="font-size:2em;">📶</div>
-                        <div>Cellular Network</div>
-                        <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
-                    </div>
-                    <div>
-                        <div style="font-size:2em;">🔦</div>
-                        <div>Flashlight</div>
-                        <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
-                    </div>
-                    <div>
-                        <div style="font-size:2em;">🔗</div>
-                        <div>Software Update</div>
-                        <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
-                    </div>
-                    <div>
-                        <div style="font-size:2em;">🔎</div>
-                        <div>Find</div>
-                        <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
-                    </div>
-                </div>
-                <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
-            </div>
+        <div>
+          <div style="font-size:2em;">📶</div>
+          <div>Cellular Network</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">4G</button>
         </div>
+        <div>
+          <div style="font-size:2em;">🔦</div>
+          <div>Flashlight</div>
+          <button style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">On/Off</button>
+        </div>
+          <div>
+          <div style="font-size:2em;">🔗</div>
+          <div>Software Update</div>
+          <button onclick="alert('Android100 just came out....\nWhy would you need an update?')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Check</button>
+        </div>
+          <div>
+          <div style="font-size:2em;">🔎</div>
+          <div>Find</div>
+          <button onclick="alert('Did you know?\nYou can use Find to locate your real mother.\nBut I will save you the trouble.\nAndroid100 is your real mother')" style="margin-top:4px; background:#00ff88; color:#181818; border:none; border-radius:6px; padding:4px 12px; font-weight:bold; cursor:pointer;">Find...</button>
+        </div>
+      </div>
+      <button onclick="hideControlCenter()" style="margin-top:18px; background:#333; color:#fff; border:none; border-radius:8px; padding:8px 32px; font-size:1em; font-weight:bold; cursor:pointer;">Close</button>
+    </div>
+  </div>
         <div class="content-top-margin">
             <main>
                 <br>
@@ -202,20 +223,22 @@
             let trayStartY = null;
             const tray = document.getElementById('tray');
             const controlCenter = document.getElementById('control-center');
+
             tray.addEventListener('touchstart', function(e) {
-                if (e.touches.length === 1) {
-                    trayStartY = e.touches[0].clientY;
-                }
+              if (e.touches.length === 1) {
+                trayStartY = e.touches[0].clientY;
+              }
             });
             tray.addEventListener('touchend', function(e) {
-                if (trayStartY !== null && e.changedTouches.length === 1) {
-                    let trayEndY = e.changedTouches[0].clientY;
-                    if (trayEndY - trayStartY > 40) {
-                        showControlCenter();
-                    }
+              if (trayStartY !== null && e.changedTouches.length === 1) {
+                let trayEndY = e.changedTouches[0].clientY;
+                if (trayEndY - trayStartY > 40) {
+                  showControlCenter();
                 }
-                trayStartY = null;
+              }
+              trayStartY = null;
             });
+
             let mouseDownY = null;
             tray.addEventListener('mousedown', function(e) {
                 mouseDownY = e.clientY;
@@ -230,9 +253,17 @@
             });
             function showControlCenter() {
                 controlCenter.style.display = 'block';
+                // Force reflow for transition to work if hidden
+                void controlCenter.offsetWidth;
+                controlCenter.classList.add('active');
             }
             function hideControlCenter() {
-                controlCenter.style.display = 'none';
+                controlCenter.classList.remove('active');
+                setTimeout(() => {
+                    if (!controlCenter.classList.contains('active')) {
+                        controlCenter.style.display = 'none';
+                    }
+                }, 350);
             }
 
       
@@ -257,6 +288,30 @@
             window.addEventListener('DOMContentLoaded', function() {
                 setTimeout(tryFullscreen, 300);
             });
+
+            // Swipe up to unlock (go to main.html)
+    let swipeStartY = null;
+    let swipeAnimating = false;
+    const swipeContainer = document.getElementById('swipeContainer');
+
+    document.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1 && !swipeAnimating) {
+        swipeStartY = e.touches[0].clientY;
+      }
+    });
+    document.addEventListener('touchend', function(e) {
+      if (swipeStartY !== null && e.changedTouches.length === 1 && !swipeAnimating) {
+        let swipeEndY = e.changedTouches[0].clientY;
+        if (swipeStartY - swipeEndY > 30) { // swipe up threshold
+          swipeAnimating = true;
+          swipeContainer.classList.add('swipe-up-anim');
+          setTimeout(function() {
+            window.location.href = "system/main.html";
+          }, 350);
+        }
+      }
+      swipeStartY = null;
+    });
         </script>
     </body>
 </html>
